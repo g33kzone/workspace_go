@@ -1,0 +1,28 @@
+# This is a TOML document
+# TOML documentation can be found here https://github.com/toml-lang/toml/
+
+[GinConfig]
+Mode = 'debug' # valid modes are debug, test and release
+Host = 'localhost'
+Port = 8082
+
+[PostgresConfig]
+Server = 'localhost'
+Port = 5432
+Database = 'odjdb'
+User = 'odjuser'
+Password = 'odjuser'
+DBRetryAttempts = 3
+DBReadTimeout = 30000 # in miliseconds
+DBWriteTimeout = 30000 # in miliseconds
+DBMaxConnections = 16
+DBConnectionMaxLife = 10 # in minutes
+
+[SwaggerConfig]
+Host = 'localhost'
+Port = 8182
+
+[RepoDetails]
+Branch = 'master'
+UserName = 'babitagurjar'
+FileName = 'cloudbuild.yaml'

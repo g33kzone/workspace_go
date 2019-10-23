@@ -1,0 +1,233 @@
+basePath: /
+definitions:
+  model.APIMessage:
+    properties:
+      code:
+        example: 200
+        type: integer
+      text:
+        example: hello world!
+        type: string
+    type: object
+  model.Change:
+    properties:
+      closed:
+        type: boolean
+      commits:
+        items:
+          $ref: '#/definitions/model.Commit'
+        type: array
+      new:
+        $ref: '#/definitions/model.CommitBranch'
+        type: object
+    type: object
+  model.Commit:
+    properties:
+      hash:
+        type: string
+      message:
+        type: string
+    type: object
+  model.CommitBranch:
+    properties:
+      name:
+        type: string
+    type: object
+  model.ComponentResponse:
+    properties:
+      component_name:
+        type: string
+      product_name:
+        type: string
+      project_id:
+        type: string
+      repository_name:
+        type: string
+      repository_url:
+        type: string
+      trigger_id:
+        type: string
+    type: object
+  model.GitCommits:
+    properties:
+      id:
+        type: string
+      message:
+        type: string
+    type: object
+  model.GitRepository:
+    properties:
+      master_branch:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  model.GitResponse:
+    properties:
+      commits:
+        items:
+          $ref: '#/definitions/model.GitCommits'
+        type: array
+      repository:
+        $ref: '#/definitions/model.GitRepository'
+        type: object
+    type: object
+  model.Html:
+    properties:
+      href:
+        type: string
+    type: object
+  model.Link:
+    properties:
+      html:
+        $ref: '#/definitions/model.Html'
+        type: object
+    type: object
+  model.Push:
+    properties:
+      changes:
+        items:
+          $ref: '#/definitions/model.Change'
+        type: array
+    type: object
+  model.Repository:
+    properties:
+      full_name:
+        type: string
+      links:
+        $ref: '#/definitions/model.Link'
+        type: object
+    type: object
+  model.Response:
+    properties:
+      push:
+        $ref: '#/definitions/model.Push'
+        type: object
+      repository:
+        $ref: '#/definitions/model.Repository'
+        type: object
+    type: object
+host: '{{.Host}}'
+info:
+  contact:
+    email: babita.gurjar@infosys.com
+    name: Babita Gurjar
+    url: https://infosys.com
+  description: This API is used to Create Trigger and store Build Details
+  license: {}
+  title: One developer journey template
+  version: "0.1"
+paths:
+  /odj-deliver/create-trigger:
+    post:
+      consumes:
+      - application/json
+      description: create cloudbuild trigger and store triggerId in component table
+      operationId: odj-cloudbuild
+      parameters:
+      - description: Information of Component to Create Cloud Build Trigger
+        in: body
+        name: newComponent
+        required: true
+        schema:
+          $ref: '#/definitions/model.ComponentResponse'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+      summary: Create cloudbuild trigger in GCP
+  /odj-deliver/webhook/bitbucket:
+    post:
+      consumes:
+      - application/json
+      description: capture a webook payload of Bitbucket and store build details into
+        build table
+      operationId: odj-webhook-bitbucket
+      parameters:
+      - description: Information of Commit and Build to insert
+        in: body
+        name: bitbucketResponse
+        required: true
+        schema:
+          $ref: '#/definitions/model.Response'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+      summary: capture webook payload and store the build details into build table
+  /odj-deliver/webhook/github:
+    post:
+      consumes:
+      - application/json
+      description: capture a webook payload of Github and store build details into
+        build table
+      operationId: odj-webhook-github
+      parameters:
+      - description: Information of Commit and Build to insert
+        in: body
+        name: githubResponse
+        required: true
+        schema:
+          $ref: '#/definitions/model.GitResponse'
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.APIMessage'
+            type: object
+      summary: capture webook payload and store the build details into build table
+swagger: "2.0"

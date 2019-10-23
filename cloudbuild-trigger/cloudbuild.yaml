@@ -1,0 +1,74 @@
+steps:
+  - name: 'gcr.io/cloud-builders/go'
+  args: ['install', '.']
+  dir: '/'
+    # - name: 'gcr.io/cloud-builders/npm'
+    #   args: ['install']
+    # - name: 'gcr.io/cloud-builders/go'
+    #   args: ['build', 'main.go']
+    - name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '--tag', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA', '.' ]
+    # Ensure that "go get" works
+    - name: 'gcr.io/$PROJECT_ID/go'
+  args: ['get', 'golang.org/x/net/context']
+  env: ['GOPATH=/tmp']
+  # images:
+  # - 'gcr.io/cicd-69745/$REPO_NAME:$COMMIT_SHA', '.' '
+  # - name: 'gcr.io/cloud-builders/kubectl'
+  #   args:
+  #    - 'set'
+  #    - 'image'
+  #    - 'cloudsolutions'
+  #  - 'cloud-solution-container=gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+  # env:
+  #  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  #  - 'CLOUDSDK_CONTAINER_CLUSTER=cloud-solutions-cluster'
+  # - name: 'gcr.io/cloud-builders/kubectl'
+  #   args:
+  #   - 'delete'
+  #   - 'deployment'
+  #   - 'cloudsolutions'
+  #   - '--ignore-not-found'
+  #   env:
+  #   - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  #   - 'CLOUDSDK_CONTAINER_CLUSTER=cloud-solutions-cluster'
+  # # - name: 'gcr.io/cloud-builders/kubectl'
+  # #   args:
+  # #   - 'run'
+  # #   - 'cloudsolutions'
+  # #   - '--image=gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+  # #   env:
+  # #   - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  #   - 'CLOUDSDK_CONTAINER_CLUSTER=cloud-solutions-cluster'
+  # - 'resources requests cpu=100m memory=150Mi'
+  # - 'resources limits cpu=200m memory=250Mi'
+
+# - name: 'gcr.io/cloud-builders/kubectl'
+#   args:
+#    - 'scale'
+#    - 'deployment'
+#    - 'cloudsolutions'
+#    - '--replicas=3'
+# - name: 'gcr.io/cloud-builders/kubectl'
+#   args:
+#    - 'delete'
+#    - 'service'
+#    - 'gcpcloud-build-solution-service'
+#    - '--ignore-not-found'
+images: ['gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
+#   args:
+#   - 'expose'
+#   - 'deployment'
+#   - '$PROJECT_ID'
+#   - '--type=LoadBalancer'
+#   - '--port=80'
+#   - '--target-port=8001'
+#   - '--name=gcpcloud-build-solution-service'
+#   # - '--load-balancer-ip=35.232.105.69'
+# images: ['gcr.io/cicd-69745/$REPO_NAME:$COMMIT_SHA']
+
+# steps:
+# - name: 'gcr.io/cloud-builders/npm'
+#   args: ['install']
+# - name: 'gcr.io/cloud-builders/npm'
+#   args: ['test']
