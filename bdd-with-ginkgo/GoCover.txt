@@ -1,0 +1,8 @@
+Failed to compile bdd-with-ginkgo:
+
+# github.com/g33kzone/go-bdd-ginkgo
+cart_test.go:6:2: unknown import path "go-bdd-ginkgo": cannot find module providing package go-bdd-ginkgo
+FAIL	github.com/g33kzone/go-bdd-ginkgo [setup failed]
+
+Ginkgo ran 1 suite in 1.407988984s
+Test Suite Failed

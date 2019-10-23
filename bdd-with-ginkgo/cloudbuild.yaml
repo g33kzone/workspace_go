@@ -1,0 +1,16 @@
+steps:
+- name: 'gcr.io/cloud-builders/go'
+  args: ['install', '.']
+  env: ['PROJECT_ROOT=go-bdd-ginkgo']  
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'eu.gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA','.']
+- name: 'gcr.io/cloud-builders/go'
+  args: ['test', '-coverprofile=coverage.out']
+  env: ['PROJECT_ROOT=go-bdd-ginkgo']
+- name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
+  args:
+  - '-Dsonar.host.url=https://sonarcloud.io'
+  - '-Dsonar.login=8049b063a584fe4f7271ad7119d09b41d5591748'
+  - '-Dsonar.projectKey=bdd-with-ginkgo'
+  - '-Dsonar.organization=g33kzone'
+  - '-Dsonar.sources=.'  
